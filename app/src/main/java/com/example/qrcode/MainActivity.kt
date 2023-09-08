@@ -1,14 +1,12 @@
 package com.example.qrcode
 
 import PrintActivity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
-import java.io.OutputStream
 import java.io.Serializable
 import java.util.Hashtable
 import java.util.Locale
@@ -38,10 +35,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var txtToSpeechMssg: TextToSpeech
     private var deviceID: String = ""
-    private var qrCodeLink: String = ""
+    //private var qrCodeLink: String = ""
     private var storedDeviceID: String = ""
     private var dialogOnStartup = false
-    private lateinit var button: Button
+    //private lateinit var button: Button
     private lateinit var receiptData: ReceiptData
     private lateinit var printActivity: PrintActivity
 
@@ -164,37 +161,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun writePaymentDetails(outputStream: OutputStream) {
-        // Initialize the printer
-        val initCommand = byteArrayOf(0x1B, 0x40) // ESC @
-        outputStream.write(initCommand)
-
-        // Set font size and style
-        val setFontSizeCommand = byteArrayOf(0x1B, 0x21, 0x10) // ESC ! 16
-        outputStream.write(setFontSizeCommand)
-
-        // Set text alignment to center
-        val setAlignmentCommand = byteArrayOf(0x1B, 0x61, 0x01) // ESC a 1 (center alignment)
-        outputStream.write(setAlignmentCommand)
-
-        // Write payment details
-        val receiptContent = "Receipt Content\n" +
-                "Amount: ${receiptData.amount_paid}\n" +
-                "Order ID: ${receiptData.order_id}\n" +
-                "Date and Time: ${receiptData.current_date_time}\n"
-
-        val textCommand = receiptContent.toByteArray(Charsets.UTF_8)
-        outputStream.write(textCommand)
-
-        Log.d("RECEIPT DATA", "$receiptContent")
-
-        // Cut the paper (full cut)
-        val cutCommand = byteArrayOf(0x1D.toByte(), 'V'.toByte(), 1) // GS V 1 (full cut)
-        outputStream.write(cutCommand)
-    }
-
-
-
     private fun generateAndDisplayQRCode(storedDeviceID: String) {
         val qrCodeLink = "http://localhost/filipay/?sn=$deviceID"
         val hints = Hashtable<EncodeHintType, Any>()
@@ -214,12 +180,6 @@ class MainActivity : AppCompatActivity() {
         qrCodeImageView.setImageBitmap(bitmap)
     }
 
-
-    private fun initializePrinter(applicationContext: Context): PrintActivity {
-        // Initialize your printer connection here (e.g., USB, Bluetooth)
-        // Return an instance of YourPrinterConnection (you need to implement this)
-        return PrintActivity()
-    }
 
 
 }

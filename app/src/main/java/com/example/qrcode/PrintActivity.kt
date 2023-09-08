@@ -43,12 +43,11 @@ class PrintActivity {
 
     fun openConnection() {
 
-
     }
 
 
     fun closeBluetoothConnection() {
-        // Implement the logic to close the Bluetooth connection here.
+
     }
 
     fun sendDataToBluetoothPrinter(escPosCommands: ByteArray, receiptData: MainActivity.ReceiptData) {
